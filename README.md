@@ -1,1 +1,1 @@
-readme
+config files for bash and zsh
