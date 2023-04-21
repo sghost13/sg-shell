@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+# dirs ----------------------------------------------------------------------
+
+SHELLCONFD="$HOME/.config/shell/conf.d"
+BASHDOTDIR="$HOME/.config/shell/bash"
+
+# XDG ----------------------------------------------------------------------
+
+
+# shopt ----------------------------------------------------------------------
+
+set -o noclobber                 # Prevent file overwrite on stdout redirection; use `>|` to force
+shopt -s histappend              # append to history, don't overwrite it
+shopt -s checkwinsize            # Update window size after every command
+shopt -s cmdhist                 # Save multi-line commands as one command
+shopt -s extglob 2> /dev/null    # Turn on extended globbing
+shopt -s globstar 2> /dev/null   # Turn on recursive globbing (enables ** to recurse all directories)
+shopt -s nocaseglob              # Case-insensitive globbing (used in pathname expansion)
+shopt -s autocd 2> /dev/null     # Prepend cd to directory names automatically
+shopt -s dirspell 2> /dev/null   # Correct spelling errors during tab-completion
+shopt -s cdspell 2> /dev/null    # Correct spelling errors in arguments supplied to cd
+shopt -s cdable_vars             # CD across the filesystem as if you're in that dir
+#set -o vi                        # Set vi editing mode
+
+# history ----------------------------------------------------------------------
+
+HISTTIMEFORMAT='%F %T '   # use standard ISO 8601 timestamp
+HISTSIZE=100000           # remember the last x commands in memory during session
+HISTFILESIZE=100000       # start truncating history file after x lines
+HISTCONTROL=ignoreboth    # ignoreboth is shorthand for ignorespace and ignoredups
+HISTFILE=${XDG_DATA_HOME:-$HOME/.local/state}/bash/history
+[[ -f "$HISTFILE" ]] || mkdir -p $(dirname $HISTFILE)
+PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
+
+# source ----------------------------------------------------------------------
+
+# aliases
+if [[ -f "$SHELLCONFD/aliases" ]] ; then source "$SHELLCONFD/aliases" ; fi
+
+# command-not-found
+if [[ -f "$SHELLCONFD/command-not-found" ]] ; then source "$SHELLCONFD/command-not-found" ; fi
+
+# functions
+if [[ -f "$SHELLCONFD/functions" ]] ; then source "$SHELLCONFD/functions" ; fi
+
+# path
+if [[ -f "$SHELLCONFD/path" ]] ; then source "$SHELLCONFD/path" ; fi
+
+# ethrc
+if [[ -f "$SHELLCONFD/ethrc" ]] ; then source "$SHELLCONFD/ethrc" ; fi
+
+#  ----------------------------------------------------------------------
+
+export TZ="America/New_York"
+
+
+# eval ----------------------------------------------------------------------
+
+# starship
+STARSHIP_CONFIG="${$XDG_CONFIG_HOME:-$HOME/.config}/starship/bash.toml"
+eval "$(starship init bash)"
+
+
+#  ----------------------------------------------------------------------

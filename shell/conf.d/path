@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# $HOME/.config/shell/conf.d/path.sh
+
+# Append  path. If already found in path, do nothing.
+# Useage: appendpath "/path/to/add" 	  # This adds new path to begining of current path.
+#		  appendpath "/path/to/add" after # This adds new path to end of current path.
+appendpath() {
+if ! echo "$PATH" | /usr/bin/grep -Eq "(^|:)$1($|:)" ; then
+	if [[ "$2" = "after" ]] ; then
+		PATH="$PATH:$1"
+	else
+		PATH="$1:$PATH"
+	fi
+fi
+}
+
+# HOME BIN
+if [[ -d "$HOME/.local/bin" ]] ; then appendpath "$HOME/.local/bin" ; fi
+
+# SHELL BIN (ZSH, BASH, etc.)
+if [[ -d "$HOME/.local/bin/shell" ]] ; then appendpath "$HOME/.local/bin/shell" ; fi
+
+# PYTHON BIN
+if [[ -d "$HOME/.local/bin/python" ]] ; then appendpath "$HOME/.local/bin/python" ; fi
+
+# GO BIN
+if [[ -d "$HOME/.local/bin/go" ]] ; then appendpath "$HOME/.local/bin/go" ; fi
+
+# MYGO BIN
+if [[ -d "$HOME/.local/bin/mygo" ]] ; then appendpath "$HOME/.local/bin/mygo" ; fi
+
+# VOLTA BIN
+if [[ -d "$VOLTA_HOME/bin" ]] ; then appendpath "$VOLTA_HOME/bin" ; fi
+
+# CARGO BIN
+# path=($HOME/.cache/cargo/bin $path)
+
+# NODE
+# path=($path ./node_modules/.bin)
+
+# EMACS BIN
+if [[ -d "$HOME/.emacs.d/bin" ]] ; then appendpath "$HOME/.emacs.d/bin" ; fi
+
+# APPLICATIONS BIN
+if [[ -d "$HOME/Applications" ]] ; then appendpath "$HOME/Applications" ; fi
+
+# FLATPAK BIN
+if [[ -d "/var/lib/flatpak/exports/bin/" ]] ; then appendpath "/var/lib/flatpak/exports/bin/" ; fi
+
+unset appendpath
