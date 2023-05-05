@@ -8,3 +8,7 @@
 
  - Some of this stuff are personal forks of other projects(simple scripts) that i customized for my own use. 
  - I will add attributions shortly!
+
+Ideally in the end everything will be set in the shared subfolder, and everything will get sourced in drop-in files. This will allow easy customization of themes/colors through scripts later on.
+
+FRAMEWORKSFRAMEWORKSFRAMEWORKS
