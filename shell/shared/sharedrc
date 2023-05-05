@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+# $HOME/.config/shell/shared-conf.d/sharedrc
+
+# This file should contain everything you want to share between shell rc files.
+
+### CHANGE TITLE OF TERMINALS
+case ${TERM} in
+  xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|alacritty|st|konsole*)
+    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
+        ;;
+  screen*)
+    PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+    ;;
+esac
+
+## ----------------- functions
+
+# Functions required ONLY for our shell rc files to work, go here.
+# The point of these functions is essentially only to lessen the ammount of text.
+
+# Test file exhists and can be read, then source it. Else echo where it fails.
+sauce() {
+if [[ -f "$1" ]] ; then
+	if [[ -r "$1" ]] ; then
+#shellcheck disable=SC1090
+		source "$1"
+	else
+		echo "Could't read file: $1"
+	fi
+else
+	echo "File doesn't exhist: $1"
+fi
+}
+
+# Test dir exhists, then run sauce on each file within.
+sauced() {
+if [[ -d "$1" ]] ; then
+	for file in "$1"/* ; do
+		sauce "$file"
+	done
+    unset file
+else
+	echo "Directory doesn't exhist: $1"
+fi
+}
+
+# Either dir exhists, or create that directory.
+makedir() {
+	[[ -d "$1" ]] || /usr/bin/mkdir "$1"
+}
+
+# Either file exhists, or create that file.
+makefile() {
+	[[ -f "$1" ]] || /usr/bin/touch "$1"
+}
+
+## ----------------- source-folders
+
+# Source drop-in config folders.
+
+# Source all files in aliases.d folder.
+sauced "$SHARED/alias.d"
+
+# Source all files in functions.d folder.
+sauced "$SHARED/functions.d"
+
+# Source all files in $SHARED/conf.d folder.
+# Misc files we want included in our environment.
+sauced "$SHARED/conf.d"
+
+
+## ----------------- shared-dirs/files
+
+# dirs and files that need to be manually made, shared accross shells.
+
+makedir "$XDG_DATA_HOME/nodejs"
+makefile "$NODE_REPL_HISTORY"
+
+## ----------------- startup-view
+
+#/usr/bin/clear
+"$HOME"/.local/bin/colorscript --random
+# /usr/bin/exa --all --color=auto --color-scale --icons --group-directories-first --classify --grid
+
+## ----------------- nvm
+
+# Load nvm - switched to using volta
+# sauce /usr/share/nvm/init-nvm.sh
+
+## -----------------
