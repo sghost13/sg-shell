@@ -5,3 +5,6 @@
  - Leaning towards private arch repo, this will remained in dissarray until i decide on more things.
 
  - See ./shell/* subfolders in this repo for better README's.
+
+ - Some of this stuff are personal forks of other projects(simple scripts) that i customized for my own use. 
+ - I will add attributions shortly!
