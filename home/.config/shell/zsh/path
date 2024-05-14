@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# $HOME/.config/shell/conf.d/path.sh
+
+# Append  path.
+appendpath() {
+  local dir="$1"
+  local position="${2:-before}" # Default to "before" if no position is specified
+
+  if [ -d "$dir" ] && [[ ":$PATH:" != *":$dir:"* ]]; then # Verify dir exhists and is not already in path.
+    if [ "$position" = "after" ]; then
+      PATH="$PATH:$dir"
+    else
+      PATH="$dir:$PATH"
+    fi
+  fi
+}
+
+# HOME BIN
+appendpath "$HOME/.local/bin"
+
+# VOLTA
+appendpath "$VOLTA_HOME/bin"
+
+# EMACS BIN
+appendpath "$HOME/.emacs.d/bin"
+
+# FLATPAK BIN
+appendpath "/var/lib/flatpak/exports/bin/"
+
+# CARGO BIN
+appendpath "$HOME/.cache/cargo/bin"
+
+# .NET BIN
+appendpath "$HOME/.dotnet/tools"
+
+# NODE BIN
+#
+
+unset -f appendpath

@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+# Stay golden ponyapes.
+
+#⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣴⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⠀⣠⣤⣄⠀⣠⣴⡿⠋⢉⢙⠟⠛⠉⢿⣀⣠⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⣸⠃⠀⠊⢿⣿⡏⢠⣖⣉⢹⠀⣞⢀⡾⠋⡉⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠐⢿⠀⠨⠀⢸⣿⣧⣌⢙⣛⠛⠚⡟⣓⠄⠠⣡⠗⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⠹⢷⣤⣠⣼⣿⣿⣿⡾⢟⡉⠀⠋⠛⣦⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⠃⠀⠀⠀⠄⠀⢃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡿⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣇⠀⠀⠀⠀⠀⠀⣤⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣷⣦⡤⠤⣤⣬⣙⠖⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⡧⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⠀⠀⠀⡀⢀⠙⠛⢿⣿⣿⣿⣿⣴⠑⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠀⡠⣤⠈⠀⠳⡄⠀⡀⢙⣙⣿⣿⣨⣼⠾⢐⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠀⠠⡀⡀⡀⠈⠠⢧⡀⠘⢁⠀⢿⣿⡟⡍⠀⢸⢣⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+#⠀⠀⠆⠆⠀⠀⣸⠁⠀⠙⠀⠈⠲⡆⠸⠌⠟⠘⠚⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
+### Colors ##
+ESC=$(echo '\033')
+RESET="${ESC}[0m"
+REDBOLD="${ESC}[1;31m" 
+GREENBOLD="${ESC}[1;32m" 
+YELLOWBOLD="${ESC}[1;33m" 
+BLUEBOLD="${ESC}[1;34m"
+MAGENTABOLD="${ESC}[1;35m" 
+CYANBOLD="${ESC}[1;36m" 
+BLUEBOLD="${ESC}[1;34m"
+YELLOWBOLD="${ESC}[1;33m"
+
+echo -e "
+${REDBOLD}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣴⣶⡄   ${RESET}${YELLOWBOLD} ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣴⣶⡄   ${RESET}${BLUEBOLD} ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣴⣶⡄   ${RESET}${MAGENTABOLD} ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⣤⣴⣶⡄   ${RESET} 
+${REDBOLD}⠀⠀⠀⠀⣠⣤⣄⠀⣠⣴⡿⠋⢉⢙⠟⠛⠉⢿⣀⣠⡀${RESET}${YELLOWBOLD}⠀⠀⠀⠀⠀⣠⣤⣄⠀⣠⣴⡿⠋⢉⢙⠟⠛⠉⢿⣀⣠⡀${RESET}${BLUEBOLD}⠀⠀⠀⠀⠀⣠⣤⣄⠀⣠⣴⡿⠋⢉⢙⠟⠛⠉⢿⣀⣠⡀${RESET}${MAGENTABOLD}⠀⠀⠀⠀⠀⣠⣤⣄⠀⣠⣴⡿⠋⢉⢙⠟⠛⠉⢿⣀⣠⡀${RESET}⠀
+${REDBOLD}⠀⠀⠀⣸⠃⠀⠊⢿⣿⡏⢠⣖⣉⢹⠀⣞⢀⡾⠋⡉⠋${RESET}${YELLOWBOLD} ⠀⠀⠀⣸⠃⠀⠊⢿⣿⡏⢠⣖⣉⢹⠀⣞⢀⡾⠋⡉⠋${RESET}${BLUEBOLD} ⠀⠀⠀⣸⠃⠀⠊⢿⣿⡏⢠⣖⣉⢹⠀⣞⢀⡾⠋⡉⠋${RESET}${MAGENTABOLD} ⠀⠀⠀⣸⠃⠀⠊⢿⣿⡏⢠⣖⣉⢹⠀⣞⢀⡾⠋⡉⠋${RESET} 
+${REDBOLD}⠀⠀⠐⢿⠀⠨⠀⢸⣿⣧⣌⢙⣛⠛⠚⡟⣓⠄⠠⣡⠗${RESET}${YELLOWBOLD} ⠀⠀⠐⢿⠀⠨⠀⢸⣿⣧⣌⢙⣛⠛⠚⡟⣓⠄⠠⣡⠗${RESET}${BLUEBOLD} ⠀⠀⠐⢿⠀⠨⠀⢸⣿⣧⣌⢙⣛⠛⠚⡟⣓⠄⠠⣡⠗${RESET}${MAGENTABOLD} ⠀⠀⠐⢿⠀⠨⠀⢸⣿⣧⣌⢙⣛⠛⠚⡟⣓⠄⠠⣡⠗${RESET} 
+${REDBOLD}⠀⠀⠀⠹⢷⣤⣠⣼⣿⣿⣿⡾⢟⡉⠀⠋⠛⣦⠞⠁⠀${RESET}${YELLOWBOLD} ⠀⠀⠀⠹⢷⣤⣠⣼⣿⣿⣿⡾⢟⡉⠀⠋⠛⣦⠞⠁⠀${RESET}${BLUEBOLD} ⠀⠀⠀⠹⢷⣤⣠⣼⣿⣿⣿⡾⢟⡉⠀⠋⠛⣦⠞⠁⠀${RESET}${MAGENTABOLD} ⠀⠀⠀⠹⢷⣤⣠⣼⣿⣿⣿⡾⢟⡉⠀⠋⠛⣦⠞⠁⠀${RESET} 
+${REDBOLD}⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⠃⠀⠀⠀⠄⠀⢃⠀⠀⠀${RESET}${YELLOWBOLD} ⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⠃⠀⠀⠀⠄⠀⢃⠀⠀⠀${RESET}${BLUEBOLD} ⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⠃⠀⠀⠀⠄⠀⢃⠀⠀⠀${RESET}${MAGENTABOLD} ⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⠃⠀⠀⠀⠄⠀⢃⠀⠀⠀${RESET} 
+${REDBOLD}⠀⠀⠀⠀⠀⠀⠀⢸⣿⡿⠀⠀⠀⠀⠀⠀⡀⠀⠀  ${RESET}${YELLOWBOLD} ⠀⠀⠀⠀⠀⠀⠀⢸⣿⡿⠀⠀⠀⠀⠀⠀⡀⠀⠀  ${RESET}${BLUEBOLD} ⠀⠀⠀⠀⠀⠀⠀⢸⣿⡿⠀⠀⠀⠀⠀⠀⡀⠀⠀  ${RESET}${MAGENTABOLD} ⠀⠀⠀⠀⠀⠀⠀⢸⣿⡿⠀⠀⠀⠀⠀⠀⡀⠀⠀  ${RESET} 
+${REDBOLD}⠀⠀⠀⠀⠀⠀⠀⠸⣿⣇⠀⠀⠀⠀⠀⠀⣤⠀⡀  ${RESET}${YELLOWBOLD} ⠀⠀⠀⠀⠀⠀⠀⠸⣿⣇⠀⠀⠀⠀⠀⠀⣤⠀⡀  ${RESET}${BLUEBOLD} ⠀⠀⠀⠀⠀⠀⠀⠸⣿⣇⠀⠀⠀⠀⠀⠀⣤⠀⡀  ${RESET}${MAGENTABOLD} ⠀⠀⠀⠀⠀⠀⠀⠸⣿⣇⠀⠀⠀⠀⠀⠀⣤⠀⡀  ${RESET} 
+${REDBOLD}⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣷⣦⡤⠤⣤⣬⣙⠖⠂⠀ ${RESET}${YELLOWBOLD} ⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣷⣦⡤⠤⣤⣬⣙⠖⠂⠀ ${RESET}${BLUEBOLD} ⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣷⣦⡤⠤⣤⣬⣙⠖⠂⠀ ${RESET}${MAGENTABOLD} ⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣷⣦⡤⠤⣤⣬⣙⠖⠂⠀ ${RESET} 
+${REDBOLD}⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⡧⠄⠀⠀⠀⠀⠀   ${RESET}${YELLOWBOLD} ⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⡧⠄⠀⠀⠀⠀⠀   ${RESET}${BLUEBOLD} ⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⡧⠄⠀⠀⠀⠀⠀   ${RESET}${MAGENTABOLD} ⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⡧⠄⠀⠀⠀⠀⠀   ${RESET} 
+${REDBOLD}⠀⠀⠀⡀⢀⠙⠛⢿⣿⣿⣿⣿⣴⠑⠀⠀⠀    ${RESET}${YELLOWBOLD} ⠀⠀⠀⡀⢀⠙⠛⢿⣿⣿⣿⣿⣴⠑⠀⠀⠀    ${RESET}${BLUEBOLD} ⠀⠀⠀⡀⢀⠙⠛⢿⣿⣿⣿⣿⣴⠑⠀⠀⠀    ${RESET}${MAGENTABOLD} ⠀⠀⠀⡀⢀⠙⠛⢿⣿⣿⣿⣿⣴⠑⠀⠀⠀    ${RESET} 
+${REDBOLD}⡠⣤⠈⠀⠳⡄⠀⡀⢙⣙⣿⣿⣨⣼⠾⢐⡆⠀   ${RESET}${YELLOWBOLD} ⡠⣤⠈⠀⠳⡄⠀⡀⢙⣙⣿⣿⣨⣼⠾⢐⡆⠀   ${RESET}${BLUEBOLD} ⡠⣤⠈⠀⠳⡄⠀⡀⢙⣙⣿⣿⣨⣼⠾⢐⡆⠀   ${RESET}${MAGENTABOLD} ⡠⣤⠈⠀⠳⡄⠀⡀⢙⣙⣿⣿⣨⣼⠾⢐⡆⠀   ${RESET} 
+${REDBOLD} ⡀⡀⡀⠈⠠⢧⡀⠘⢁⠀⢿⣿⡟⡍⠀⢸⢣⠀  ${RESET}${YELLOWBOLD}  ⡀⡀⡀⠈⠠⢧⡀⠘⢁⠀⢿⣿⡟⡍⠀⢸⢣⠀  ${RESET}${BLUEBOLD}  ⡀⡀⡀⠈⠠⢧⡀⠘⢁⠀⢿⣿⡟⡍⠀⢸⢣⠀  ${RESET}${MAGENTABOLD}  ⡀⡀⡀⠈⠠⢧⡀⠘⢁⠀⢿⣿⡟⡍⠀⢸⢣⠀  ${RESET} 
+${REDBOLD}⠀⠆⠆⠀⠀⣸⠁⠀⠙⠀⠈⠲⡆⠸⠌⠟⠘⠚⠒⠀ ${RESET}${YELLOWBOLD} ⠀⠆⠆⠀⠀⣸⠁⠀⠙⠀⠈⠲⡆⠸⠌⠟⠘⠚⠒⠀ ${RESET}${BLUEBOLD} ⠀⠆⠆⠀⠀⣸⠁⠀⠙⠀⠈⠲⡆⠸⠌⠟⠘⠚⠒⠀ ${RESET}${MAGENTABOLD} ⠀⠆⠆⠀⠀⣸⠁⠀⠙⠀⠈⠲⡆⠸⠌⠟⠘⠚⠒⠀ ${RESET} 
+"

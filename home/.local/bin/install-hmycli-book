@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# Turn hmydocs into mdbook.
+
+
+# TODO: Save settings files. move elsewhere then back after book is remade.
+# TODO: Verify install-hmycli exhists
+# TODO: Clean up and optimize. Enable for use with other books.
+# TODO: Figure out hmy docs ouput control debacle
+
+/usr/bin/clear
+
+# Make sure mdbook dir exhists.
+if [[ ! -d "$HOME/mdbook" ]] ; then mkdir "$HOME/mdbook" ; fi
+
+if [[ $PWD != $HOME/mdbook ]] ; then
+	echo " hmy docs doesn't allow controling output that I know of, and i am lazy."
+	echo " Please change directory to $HOME/mdbook and run again."
+	echo " Exiting..."
+	exit 1
+fi
+
+# Remove all book stuff in order to recreate fresh docs.
+clean-create() {
+
+# less typing.
+local hmyclibook="$HOME/mdbook/hmycli-book"
+
+# Remove old book if it exhists.
+if [[ -d "$hmyclibook" ]] ; then /usr/bin/rm -rf "$hmyclibook" ; fi
+
+# Make sure hmycli-book dir exhists
+if [[ ! -d "$hmyclibook" ]] ; then /usr/bin/mkdir "$hmyclibook" ; fi
+
+# Create new Docs set.
+hmy docs
+
+# Init new blank book
+mdbook init --ignore none --title hmycli-book "$hmyclibook"
+
+# Remove stock files from mdbook init src dir.
+if [[ -f "$hmyclibook/src/chapter_1.md" ]] ; then /usr/bin/rm -rf "$hmyclibook"/src/chapter_1.md ; fi
+if [[ -f "$hmyclibook/src/SUMMARY.md" ]] ; then /usr/bin/rm -rf "$hmyclibook/src/SUMMARY.md" ; fi
+
+# Create fresh empty summary.md file
+/usr/bin/touch "$hmyclibook/src/SUMMARY.md"
+
+}
+
+
+
+# Create a clean summary file.
+create-summary-file() {
+
+# List hmy-docs filenames
+local list summary bracket base
+
+list=$(fd . --search-path="$HOME/mdbook/hmy-docs" --maxdepth=1 --type=f)
+summary=$HOME/mdbook/hmycli-book/src/SUMMARY.md
+bracket="$(\
+basename "$f" \
+| sed  's/hmy_//g' \
+| sed  's/.md//g' \
+| sed  's/_/ /g')"
+base="$(basename "$f")"
+
+# Add base header to summary file.
+echo -e "# Summary\n" >> "$summary"
+
+# Take hmy-docs files, create the summary list with sed find and replace.
+for f in $list ; do
+
+echo -e ["${bracket}"]'('"${HOME}"/mdbook/hmycli-book/src/"$base"')' >> "$summary"
+
+done
+
+# Move .md files from hmy-docs to hmycli-book
+for f in $list ; do
+mv "$f" "$HOME/mdbook/hmycli-book/src/$base"
+done
+
+# Remove old hmycli docs dir if it exhists
+if [[ -d "$HOME/mdbook/hmy-docs" ]] ; then /usr/bin/rm -rf "$HOME/mdbook/hmy-docs" ; fi
+
+}
+
+# Fresh install hmy-cli. SEE: $HOME/.local/bin/shell/install-hmycli
+install-hmycli
+
+# See above
+clean-create
+create-summary-file
