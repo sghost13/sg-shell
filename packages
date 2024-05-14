@@ -1,7 +1,28 @@
+# ZSH stuff
+zsh
+zsh-syntax-highlighting
+zsh-fast-syntax-highlighting
+zsh-history-substring-search
+zsh-autosuggestions
+zsh-autocomplete
+zsh-completions
+zsh-doc
+
+# Terminal tools
 bat
+bat-extras
 fd
 micro
 ag
 ripgrep
 fzf
 zsh
+jetbrains-mono-nerd
+starship
+shellcheck
+rsync
+eza
+direnv
+curl
+sed
+awk
