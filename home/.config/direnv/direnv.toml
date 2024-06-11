@@ -1,10 +1,3 @@
-
-#
-# SG
-#
-
-# $XDG_CONFIG_HOME/direnv/direnv.toml
-
 [global]
 load_dotenv = true
 strict_env = true

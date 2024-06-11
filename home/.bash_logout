@@ -1,6 +1,2 @@
-#
-# ~/.bash_logout
-#
-
-command /usr/bin/clear
+command clear
 builtin history -a

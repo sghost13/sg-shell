@@ -59,6 +59,6 @@ elfman="\
  ${boldon}${whitefbright} ██▀▀▀██▀  ${boldoff}${redf}▀${reset}
  ${boldon}${whitefbright} ▀▀▀▀ ▀▀▀▀${reset}"
 
-echo -e "$elfman"
+printf %s "$elfman"
 
 

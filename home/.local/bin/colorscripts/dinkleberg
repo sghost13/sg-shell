@@ -1,10 +1,12 @@
 #!/bin/sh
 
 ### Colors ##
-ESC=$(echo '\033') RESET="${ESC}[0m"
+ESC=$(printf '\033') RESET="${ESC}[0m"
 CYAN="${ESC}[36m" BLUEBOLD="${ESC}[1;34m"
 ### Color Functions ##
+# shellcheck disable=SC3037
 bluebold() { echo -e "${BLUEBOLD}$1${RESET}"; } ;
+# shellcheck disable=SC3037
 cyan() { echo -e "${CYAN}$1${RESET}"; } ;
 
 cyan "\

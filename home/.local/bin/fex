@@ -14,7 +14,7 @@ else
     for file in "$@"
     do
 
-      if [ -f "$file" ] ; then
+      if [[ -f "${file}" ]] ; then
           case "${file%,}" in
             *.cbt|*.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
                          tar xvf "$file"       ;;
@@ -36,9 +36,11 @@ else
                          ;;
           esac
       else
-          echo "'$file' - file does not exist"
+          echo "${file} - file does not exist"
           return 1
       fi
     done
 fi
+return $?
 }
+extract "$@" || exit 1

@@ -68,10 +68,10 @@ tuxfg=${blackf}     # tux line color
 # while true; do (sleep 3s && clear && sh script); done
 
 cat << EOF
-${tuxfg}${tuxbg}
-                                                     
-                      ▄█████▄                        
-                     █████████                       
+${tuxfg}${tuxbg}                                                     
+${tuxfg}${tuxbg}                                                     
+                      ${whiteb}▄█████▄${tuxbg}                        
+                     ${whiteb}█████████${tuxbg}                       
                     ${whiteb}████████▀██${tuxbg}                      
                    ${whiteb}██████████▄██${tuxbg}                     
                    ${whiteb}██▀▀███▀▀████${tuxbg}                     

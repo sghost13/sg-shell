@@ -1,36 +1,36 @@
 #!/usr/bin/env bash
-## SG
-##
-## Description :
-## Preview script for use in my fzf functions/wrappers.
+
+# Description :
+# Preview script for use in my fzf functions/wrappers.
 
 ## Name: bash_functions
 
-#TODO implement swayimg?
-
 function fzf-preview () {
 
-if [[ -f "$1" ]] ; then
+  if [[ -z "${1}" ]]; then 
+    echo "No file or directory specified."
+    return 1
+  fi
 
-  case $1 in
-    *.jpg)   chafa $1   ;;
-    *.jpeg)  chafa $1   ;;
-    *.png)   chafa $1   ;;
-    *.svg)   chafa $1   ;;
-    *.svgz)  chafa $1   ;;
-    *.webp)  chafa $1   ;;
-    *.ico)   chafa $1   ;;
-    *.md)    glow $1    ;;
-    *.html)  lynx $1    ;;
-    *.gif)   chafa $1   ;;
-    *)       bat --color=always --style=header,header-filesize,grid "$1" ;;
-  esac
+  if [[ -f "${1}" ]] ; then
 
-elif [[ -d "$1" ]] ; then
+    case ${1} in
+      *.jpg|*.jpeg|*.png|*.svg|*.svgz|*.webp|*.ico|*.gif)
+        img2sixel "${1}" ;;
+      *.md)
+        glow -p "${1}" ;;
+      *) bat --color=always --style=header,header-filesize,grid "${1}" ;;
+    esac
 
-  exa --all --group-directories-first --color=always --icons --tree "$1"
+  elif [[ -d "${1}" ]] ; then
+    eza --all --group-directories-first --color=always --icons --tree "${1}"
 
-fi
+  else
+    echo "File or directory not found."
+    return 1
+  fi
+
+  return $?
 }
 
-fzf-preview "$1"
+fzf-preview "${1}" && exit $?

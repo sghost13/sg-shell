@@ -2,6 +2,7 @@
 
 # prints the ammount of time it takes to load an interactive shell
 
+# shellcheck disable=SC2034
 for i in $(seq 1 10) ; do
-	time $SHELL -l -i -c exit ;
+	time ${SHELL} -l -i -c exit ;
 done

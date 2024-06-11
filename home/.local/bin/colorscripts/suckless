@@ -18,7 +18,7 @@
 #${reset}${cyan}          software that sucks less${reset}            "                                                      
 
 ### Colors ##
-ESC=$(echo '\033') RESET="${ESC}[0m"
+ESC=$(printf '\033') RESET="${ESC}[0m"
 CYAN="${ESC}[36m" BLUEBOLD="${ESC}[1;34m"
 ### Color Functions ##
 bluebold() { echo -e "${BLUEBOLD}$1${RESET}"; } ;
