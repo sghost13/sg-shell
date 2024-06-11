@@ -14,31 +14,31 @@
 #	path = ~/.config/dotfiles/local/git/config.local
 
 [core]
-	excludesfile = ~/.config/git/gitignore
-	editor = micro
-	pager = delta
-	ignorecase = false
-	untrackedCache = true
+#	excludesfile = ~/.config/git/gitignore
+#	editor = micro
+#	pager = delta
+#	ignorecase = false
+#	untrackedCache = true
 #	askPass = 
 
 [gpg]
 	
 [interactive]
-	diffFilter = delta --color-only --features=interactive
+#	diffFilter = delta --color-only --features=interactive
 
 [delta]
-	navigate = true
-	light = false
-	side-by-side = true
+#	navigate = true
+#	light = false
+#	side-by-side = true
 #	features = decorations line-numbers
 #	syntax-theme = Dracula
 
 [web]
-#	browser = /usr/bin/firefox
+#	browser = firefox
 
 [http]
 	sslVerify = true
-	sslVersion = tlsv1.3
+	sslVersion = tlsv1.2
 #	userAgent = 
 #	version = 
 
@@ -49,20 +49,20 @@
 [diff]
 
 [push]
-default = simple
+#default = simple
 
 [credential]
 #	helper =
 
 [color]
-	ui = auto
+#	ui = auto
 
 [init]
-	defaultBranch = main
+#	defaultBranch = main
 
 [commit]
 #	gpgsign = true
 #	template = ~/.gitmessage
 [help]
-	autocorrect = 1
+#	autocorrect = 1
 
