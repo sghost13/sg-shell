@@ -1,0 +1,374 @@
+#!/usr/bin/env bash
+
+EZA_OPTS=(
+  --all
+  --color='always'
+  --color-scale
+  --icons
+  --group-directories-first
+  --classify
+)
+
+BAT_OPTS=(
+  --plain
+  --paging='never'
+  --decorations='never'
+  --color='always'
+)
+
+FZF_OPTS=(
+  --cycle
+  --reverse
+  --border
+  --pointer=''
+  --prompt='Search:'
+  --bind 'shift-up:preview-page-up'
+  --bind 'shift-down:preview-page-down'
+  --bind 'ctrl-c:abort'
+  --bind 'ctrl-q:abort'
+  --bind 'esc:abort'
+)
+
+#FD_OPTS=()
+
+testy() {
+  echo "\"${1+x}\""
+}
+
+# TODO: Fix "cd $EMPTY_VAR" bug.
+# Function: cd
+# Description: If no arguments are passed, use fzf to select a directory interactively with tree previews. Change working directory to selection, and list contents.
+# Usage: cd [DIRECTORY]
+function cd() {
+  clear
+  if [[ "$#" -eq 0 ]]; then
+    local dirs
+    # Find directories with fd and pipe to fzf for selection
+    dirs=$(
+      fd \
+        --hidden \
+        --color='always' \
+        --no-ignore-vcs \
+        --maxdepth='1' \
+        --type='d' |
+        command fzf "${FZF_OPTS[@]}" \
+          --ansi \
+          --preview-window='bottom,bottom,75%' \
+          --preview="fpreview './{}'"
+    )
+    builtin cd "${dirs}" || return $?
+    command eza "${EZA_OPTS[@]}"
+  else
+    builtin cd "$@" || return $?
+    if [[ "${1}" != '--help' ]]; then
+      command eza "${EZA_OPTS[@]}"
+    fi
+  fi
+  return $?
+}
+
+# Function: up
+# Description: Changes the current working directory to a specified number of parent directories.
+# Usage: up [limit]
+function up() {
+  local d limit
+  d=""
+  limit="${1}"
+  # Default to limit of 1 if not provided or invalid
+  if [[ -z "${limit}" ]] || [[ "${limit}" -le 0 ]]; then
+    limit=1
+  fi
+  # Construct the target directory path
+  for ((i = 1; i <= limit; i++)); do
+    d="../${d}"
+  done
+  # Perform cd. Show error if cd fails
+  if ! cd "${d}"; then
+    echo "Couldn't go up ${limit} dirs."
+  fi
+}
+
+# Function: sgrm
+# Description: Interactively selects files to remove using fzf with bat previews. If used with options or arguments, removes the specified files.
+# Usage: sgrm [options] [files]
+function rm() {
+  local sources
+  clear
+  if [[ "$#" -eq 0 ]]; then
+    # Prompt user interactively to select multiple files with tab + fuzzy search.
+    sources=$(
+      fd \
+        --hidden \
+        --color=always \
+        --no-ignore-vcs \
+        --maxdepth='1' |
+        command fzf "${FZF_OPTS[@]}" \
+          --ansi \
+          --multi \
+          --marker='rm' \
+          --preview="fpreview './{}'" \
+          --preview-window='right,75%'
+    )
+    # Use xargs to capture filenames with spaces properly
+    echo "${sources}" | xargs -I '{}' command rm -rf '{}'
+    command eza "${EZA_OPTS[@]}"
+  else
+    # Check if the specified path is a file or directory and use appropriate rm command
+    if [[ -f $* ]] || [[ -d $* ]]; then
+      command rm -rf "$@"
+    else
+      command rm "$@"
+    fi
+    if [[ "${1}" != '--help' ]]; then
+      command eza "${EZA_OPTS[@]}"
+    fi
+  fi
+  return $?
+}
+
+# Function: sgcp
+# Description: Interactively selects files to copy using fzf with bat previews and copies them to the specified directory. If used with options or arguments, copies the specified files to the destination.
+# Usage: sgcp [options] [files] [destination]
+function sgcp() {
+  local sources target message
+  if [[ "$#" -eq 0 ]]; then
+    message="\n\n   Use tab to select multiple files in fzf search page.\n   Use full path, not variables.\n   ie: /path/to/copy/to\n"
+    yellow "${message}"
+    # Use correct read command depending on user's shell
+    if [[ "$(basename "${SHELL}")" =~ "bash" ]]; then
+      read -r -e -p 'Copy full path destination directory: ' -i "${target}" target
+    elif [[ "$(basename "${SHELL}")" = "zsh" ]]; then
+      read -r "target?Copy full path desitinaion directory: "
+    else
+      red "$(basename "${SHELL}") is not supported. Exiting.\n"
+      return 1
+    fi
+
+    # On empty target, clear and relist files, notify user
+    if [[ -z "${target}" ]]; then
+      command clear && command eza "${EZA_OPTS[@]}"
+      red "\n     No destination specified. Canceled copy.\n"
+      return 1
+    fi
+
+    # Expand ~ in TARGET if present
+    if [[ "${target}" == *"~"* ]]; then
+      target="${target/#\~/${HOME}}"
+    fi
+
+    # Prompt user to select multiple files with fzf and fd
+    sources=$(
+      fd --hidden \
+        --color=always \
+        --no-ignore-vcs \
+        --maxdepth='1' |
+        command fzf "${FZF_OPTS[@]}" \
+          --ansi \
+          --marker='cp' \
+          --multi \
+          --preview="fpreview './{}'" \
+          --preview-window='right,75%'
+    )
+    echo "${sources}" | xargs -I '{}' command cp -fv '{}' '/'"${target}"'/'
+    command eza "${EZA_OPTS[@]}"
+  else
+    command cp -fv "$@"
+    if [[ "${1}" != '--help' ]]; then
+      command eza "${EZA_OPTS[@]}"
+    fi
+  fi
+  return $?
+}
+
+# Function: sgmv
+# Description: Interactively selects files to move using fzf with bat previews and moves them to the specified directory. If used with options or arguments, moves the specified files to the destination.
+# Usage: sgmv [options] [files] [destination]
+function sgmv() {
+  local sources target message
+  if [[ "$#" -eq 0 ]]; then
+    message="\n\n   Use tab to select mulitple files in fzf search page.\n   Use full path, not variables.\n   i.e. /path/to/directory\n"
+    yellow "${message}"
+
+    # Use correct read command depending on user's shell
+    if [[ "$(basename "${SHELL}")" =~ "bash" ]]; then
+      read -r -e -p 'Move full path destination directory : ' -i "${target}" target
+    elif [[ "$(basename "${SHELL}")" = "zsh" ]]; then
+      read -r "target?Move full path desitinaion directory : "
+    else
+      red "$(basename "${SHELL}") is not supported. Exiting.\n"
+      return 1
+    fi
+
+    # On empty target, relist files and notify user
+    if [[ -z "${target}" ]]; then
+      clear
+      eza "${EZA_OPTS[@]}"
+      red "\n\n  No destination specified. Canceled move. \n"
+      return 1
+    fi
+
+    # Expand ~ in TARGET if present
+    if [[ "${target}" == *"~"* ]]; then
+      target="${target/#\~/${HOME}}"
+    fi
+
+    # Prompt user to select multiple files with fzf and fd.
+    sources=$(
+      fd \
+        --hidden \
+        --color=always \
+        --no-ignore-vcs \
+        --maxdepth='1' |
+        command fzf "${FZF_OPTS[@]}" \
+          --ansi \
+          --marker='mv' \
+          --multi \
+          --preview="fpreview './{}'" \
+          --preview-window='right,70%'
+    )
+    echo -e "\n"
+    # Use xargs to properly handle filenames with spaces
+    echo "${sources}" | xargs -I '{}' command mv -fv '{}' '/'"${target}"'/'
+    command eza "${EZA_OPTS[@]}"
+  else
+    echo -e "\n"
+    command mv -fv "$@"
+    echo -e "\n"
+    if [[ "${1}" != '--help' ]]; then
+      command eza "${EZA_OPTS[@]}"
+    fi
+  fi
+  return $?
+}
+
+# This function only exists to fix the lag for whatis command due to zsh-fast-syntax-highlighting on mac.
+# https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
+function whatis() { if [[ -v THEFD ]]; then :; else command whatis "$@"; fi; }
+
+# Function: man
+# Description: Man without options will use fzf to select a page, with page previews and man pages always colored with bat.
+# For this to work correctly you also need to have the MANPAGER variable set to bat with correct flags. see env.sh
+# Usage: man [options] [command]
+function man() {
+  clear
+  if [[ "$#" -eq 0 ]]; then
+    # Use fzf to interactively select a man page
+    command man -k . |
+      fzf "${FZF_OPTS[@]}" \
+        --ansi \
+        --preview-window='bottom,75%' \
+        --prompt='Search Manpages : ' \
+        --preview='echo {} | sed "s/(.*//" | xargs command man' |
+      awk '{print $1}' |
+      sed 's/(.*//' |
+      xargs command man
+  else
+    command man "$@"
+  fi
+  return $?
+}
+
+# Function: m
+# Description: Opens the micro editor with the specified files. If used without arguments, interactively selects files to open using fzf with file previews.
+# Usage: m [options] [files]
+function m() {
+  local files
+  if [[ "$#" -eq 0 ]]; then
+    #shellcheck disable=SC2140
+    files=$(
+      fd \
+        --hidden \
+        --color=always \
+        --type=f \
+        --no-ignore-vcs \
+        --maxdepth=1 |
+        command fzf "${FZF_OPTS[@]}" \
+          --ansi \
+          --preview-window='bottom,75%' \
+          --preview="fpreview '{}'"
+    )
+    # We use xargs to capture filenames with spaces in them properly
+    echo "${files}" | xargs -I '{}' fopen '{}'
+  else
+    command micro "$@"
+  fi
+  # Explicitly return the exit status of the last command executed. Seems to fix an issue with micro.
+  return $?
+}
+
+# Function: env
+# Description: Displays environment variables. If used without arguments, colorizes the output using bat.
+# Usage: env [options] [arguments]
+function env() {
+  if [[ -n "$1" ]]; then
+    command env "$@"
+  else
+    clear
+    command env | command bat "${BAT_OPTS[@]}" --language=bash | sort
+  fi
+}
+
+# Function: alias
+# Description: Defines or displays aliases. If used without arguments, colorizes the output using bat.
+# Usage: alias [options] [arguments]
+function alias() {
+  if [[ "$#" -eq 0 ]]; then
+    clear
+    builtin alias | command bat "${BAT_OPTS[@]}" --language=bash
+  else
+    builtin alias "$@"
+  fi
+}
+
+# Function: history
+# Description: Displays command history. If used without arguments, colorizes the output using bat.
+# Usage: history [options] [arguments]
+function history() {
+  if [[ "$#" -eq 0 ]]; then
+    # Using "less" as the language only because it gave the nicest output.
+    clear
+    builtin history | command bat "${BAT_OPTS[@]}" --language=less
+  else
+    builtin history "$@"
+  fi
+}
+
+# Function: export
+# Description: Sets environment variables. If used without arguments, colorizes the output using bat.
+# Usage: export [options] [arguments]
+# function export() {
+#   if [[ "$#" -eq 0 ]]; then
+#     clear
+#     builtin export | command bat "${BAT_OPTS[@]}" --language=bash
+#   else
+#     builtin export "$@"
+#   fi
+# }
+
+# Function: touch
+# Description: Creates new files or updates file timestamps. After execution, clears the screen and lists the files in the current directory.
+# Usage: touch [options] [files]
+function touch() {
+  if [[ "${1}" != '--help' ]]; then
+    clear
+    command touch "$@" &&
+      green "\n     Touched File: \"${PWD}/$*\"\n"
+    command eza "${EZA_OPTS[@]}"
+  else
+    command touch "$@"
+  fi
+}
+
+# Function: mkdir
+# Description: Creates new directories. After execution, clears the screen and lists the files in the current directory.
+# Usage: mkdir [options] [directories]
+function mkdir() {
+  if [[ "${1}" != '--help' ]]; then
+    clear
+    command mkdir "$@" &&
+      green "\n     Created Directory: \"${PWD}/$*\"\n"
+    command eza "${EZA_OPTS[@]}"
+  else
+    command mkdir "$@"
+  fi
+}

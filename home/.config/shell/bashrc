@@ -1,0 +1,149 @@
+#!/usr/bin/env bash
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# functions
+# Either dir exhists, or create that directory.
+makedir() { [[ -d "${1}" ]] || mkdir "${1}"; }
+
+# Either file exhists, or create that file.
+makefile() { [[ -f "${1}" ]] || touch "${1}"; }
+
+# Test file exhists and can be read, then source it. Else echo where it fails.
+sauce() {
+	if [[ -f "${1}" && -r "${1}" ]]; then
+		# shellcheck disable=SC1090
+		source "${1}"
+	elif [[ ! -f "${1}" ]]; then
+		echo "File doesn't exist: ${1}"
+	else
+		echo "Couldn't read file: ${1}"
+	fi
+}
+
+# Test dir exhists, then run sauce on each file within.
+sauced() {
+	local file
+	if [[ -d "${1}" ]]; then
+		for file in "${1}"/*; do
+			sauce "${file}"
+		done
+	else
+		echo "Directory doesn't exhist: ${1}"
+	fi
+}
+
+sauce "$XDG_CONFIG_HOME/shell/env.sh"
+sauced "$XDG_CONFIG_HOME/shell/functions.d"
+sauce "$XDG_CONFIG_HOME/shell/path.sh"
+sauce "$XDG_CONFIG_HOME/shell/alias.sh"
+
+export HISTTIMEFORMAT='%F %T '
+export HISTFILE=${XDG_DATA_HOME:-$HOME/.local/state}/bash/history
+export HISTSIZE=20000
+export HISTFILESIZE=${HISTSIZE}
+export HISTCONTROL=ignoreboth:erasedups
+export HISTIGNORE="ls:eza:cl:cd:top:exit:date"
+
+# CHANGE TITLE OF TERMINALS
+case ${TERM} in
+xterm* | rxvt* | Eterm* | aterm | kterm | gnome* | alacritty | st | konsole*)
+	PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
+	;;
+screen*)
+	PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+	;;
+esac
+
+# Enable bash programmable completion features in interactive shells
+if ! shopt -oq posix; then
+	if [[ -f /usr/share/bash-completion/bash_completion ]]; then
+		builtin source /usr/share/bash-completion/bash_completion
+	elif [[ -f /etc/bash_completion ]]; then
+		builtin source /etc/bash_completion
+	fi
+fi
+
+# Ignore case on auto-completion
+# Note: bind used instead of sticking these in .inputrc
+#shellcheck disable=SC2308
+if [[ "$(expr index "$-" i)" -gt 0 ]]; then bind "set completion-ignore-case on"; fi
+
+# Show auto-completion list automatically, without double tab
+#shellcheck disable=SC2308
+if [[ "$(expr index "$-" i)" -gt 0 ]]; then bind "set show-all-if-ambiguous on"; fi
+
+# dirs and files that need to be manually made
+makedir "$XDG_STATE_HOME/bash"
+makefile "$XDG_STATE_HOME/bash/history"
+
+makedir "$XDG_DATA_HOME/nodejs"
+makefile "$NODE_REPL_HISTORY"
+
+# eval stuff
+builtin eval "$(starship init bash)"
+builtin eval "$(direnv hook bash)"
+
+# Bash shopt options
+
+#set -o vi                        # Set vi editing mode
+#set -o noclobber                 # Prevent file overwrite on stdout redirection; use `>|` to force
+
+shopt -s autocd 2>/dev/null # Prepend cd to directory names automatically
+# shopt -s assoc_expand_once
+shopt -s cdable_vars         # CD across the filesystem as if you're in that dir
+shopt -s cdspell 2>/dev/null # Correct spelling errors in arguments supplied to cd
+# shopt -s checkhash
+shopt -s checkjobs
+shopt -s checkwinsize # Update window size after every command
+shopt -s cmdhist      # Save multi-line commands as one command
+# shopt -s compat31
+# shopt -s compat32
+# shopt -s compat40
+# shopt -s compat41
+# shopt -s compat42
+# shopt -s compat43
+# shopt -s compat44
+shopt -s complete_fullquote
+shopt -s direxpand
+shopt -s dirspell 2>/dev/null # Correct spelling errors during tab-completion
+shopt -s dotglob
+shopt -s execfail
+shopt -s expand_aliases
+# shopt -s extdebug
+shopt -s extglob 2>/dev/null # Turn on extended globbing
+# shopt -s extquote
+shopt -s failglob
+# shopt -s force_fignore
+# shopt -s globasciiranges
+shopt -s globstar 2>/dev/null # Turn on recursive globbing (enables ** to recurse all directories)
+# shopt -s gnu_errfmt
+shopt -s histappend # append to history, don't overwrite it
+shopt -s histreedit
+shopt -s histverify
+shopt -s hostcomplete
+# shopt -s huponexit
+# shopt -s inherit_errexit
+shopt -s interactive_comments
+shopt -s lastpipe
+# shopt -s lithist
+# shopt -s localvar_inherit
+# shopt -s localvar_unset
+# shopt -s login_shell
+# shopt -s mailwarn
+shopt -s no_empty_cmd_completion
+shopt -s nocaseglob # Case-insensitive globbing (used in pathname expansion)
+# shopt -s nocasematch
+shopt -s nullglob
+# shopt -s progcomp
+# shopt -s progcomp_alias
+# shopt -s promptvars
+# shopt -s restricted_shell
+shopt -s shift_verbose
+shopt -s sourcepath
+shopt -s xpg_echo
+
+colorscript
+
+unset -f makedir makefile sauce sauced

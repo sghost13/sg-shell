@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+
+# Make sure needed commands exhist.
+command_exists() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+# Converts a string to lower case.
+tolower() {
+  local input
+  if [[ -n "${1}" ]]; then
+    input="${1}"
+  else
+    read -r input
+  fi
+  tr "[:upper:]" "[:lower:]" <<<"${input}"
+}
+
+# Converts a string to upper case.
+toupper() {
+  local input
+  if [[ -n "${1}" ]]; then
+    input="${1}"
+  else
+    read -r input
+  fi
+  tr "[:lower:]" "[:upper:]" <<<"${input}"
+}
+
+function search_fonts() {
+  #fc-list -f '%{file}\n' | fzf "${FZF_OPTS[@]}"
+  #fc-list | sort | fzf "${FZF_OPTS[@]}"
+  fc-match -a 'Monospace' | sort | uniq | fzf "${FZF_OPTS[@]}"
+}
+
+# simple extract command.
+#TODO: finish separate fzf-extract standalone script and remove this.
+ex() {
+  if [ -f "$1" ]; then
+    case "$1" in
+    *.tar.bz2) tar xjf "$1" ;;
+    *.tar.gz) tar xzf "$1" ;;
+    *.tar.xz) tar xf "$1" ;;
+    *.tar.zst) tar xf "$1" ;;
+    *.tar) tar xf "$1" ;;
+    *.bz2) bunzip2 "$1" ;;
+    *.rar) unrar x "$1" ;;
+    *.gz) gunzip "$1" ;;
+    *.tbz2) tar xjf "$1" ;;
+    *.tgz) tar xzf "$1" ;;
+    *.zip) unzip "$1" ;;
+    *.Z) uncompress "$1" ;;
+    *.7z) 7z x "$1" ;;
+    *.deb) ar x "$1" ;;
+    *) echo "$1 cannot be extracted via ex()" ;;
+    esac
+  else
+    echo "$1 is not a valid file"
+  fi
+}
+
+# remove icons from eza --icons cmd
+function strip_icons {
+  rev |
+    cut -f1 -d' ' |
+    rev |
+    sed \
+      -e 's/\[[0-9];[0-9][0-9]m//g' \
+      -e 's/\[[0-9];[0-9];[0-9][0-9]m//g' \
+      -e 's/\[0m//g' \
+      -e 's/\[1m//g' \
+      -e 's///g'
+}
+
+## FIXED VERSION:::
+#function strip_icons {
+#    sed -E -e 's/\x1B\[[0-9;]*[mGK]//g' -e 's/\x0E//g' -e 's/\x0F//g'
+#}
+
+# ----------------- colors
+## Description :
+## Easy to use, simple color wrappers with the echo/tput commands.
+
+## Color Functions
+red() {
+  local red normal
+  red="$(tput setaf 1)"
+  normal="$(tput sgr0)"
+  builtin echo -e "${red}${1}${normal}"
+}
+green() {
+  local green normal
+  green="$(tput setaf 2)"
+  normal="$(tput sgr0)"
+  builtin echo -e "${green}${1}${normal}"
+}
+yellow() {
+  local yellow normal
+  yellow="$(tput setaf 3)"
+  normal="$(tput sgr0)"
+  builtin echo -e "${yellow}${1}${normal}"
+}
+blue() {
+  local blue normal
+  blue="$(tput setaf 4)"
+  normal="$(tput sgr0)"
+  builtin echo -e "${blue}${1}${normal}"
+}
+magenta() {
+  local magenta normal
+  magenta="$(tput setaf 5)"
+  normal="$(tput sgr0)"
+  builtin echo -e "${magenta}${1}${normal}"
+}
+cyan() {
+  local cyan normal
+  cyan="$(tput setaf 6)"
+  normal="$(tput sgr0)"
+  builtin echo -e "${cyan}${1}${normal}"
+}
+white() {
+  local white normal
+  white="$(tput setaf 7)"
+  normal="$(tput sgr0)"
+  builtin echo -e "${white}${1}${normal}"
+}
+grey() {
+  local grey normal
+  grey="$(tput setaf 8)"
+  normal="$(tput sgr0)"
+  builtin echo -e "${grey}${1}${normal}"
+}

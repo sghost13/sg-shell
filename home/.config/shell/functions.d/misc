@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+# Function: mcd
+# Description: Creates a new directory and changes the current working directory to the newly created directory.
+# Usage: mcd [directory]
+mcd() {
+  mkdir "${1}"
+  builtin cd "${1}" || return 1
+  clear
+  eza "${EZA_OPTS[@]}"
+}
+
+# Function: pace
+# Description: Interactively searches for explicitly installed packages using fzf and displays package information using pacman.
+# Usage: pace
+pace() {
+  pacman -Qeq | fzf "${FZF_OPTS[@]}" --ansi --preview-window=bottom,75% --preview="pacman -Qi {}"
+}
+
+# Function: pacd
+# Description: Interactively searches for packages installed as dependencies using fzf and displays package information using pacman.
+# Usage: pacd
+pacd() {
+  pacman -Qdq | fzf "${FZF_OPTS[@]}" --ansi --preview-window=bottom,75% --preview="pacman -Qi {}"
+}
+
+# Function: matrix
+# Description: Load the matrix
+# Usage: matrix
+matrix() {
+  local lines cols awkscript
+  lines=$(tput lines)
+  cols=$(tput cols)
+  # shellcheck disable=SC2016
+  awkscript='
+  {
+    letters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()"
+    lines=$1
+    random_col=$3
+    c=$4
+    letter=substr(letters,c,1)
+    cols[random_col]=0;
+    for (col in cols) {
+      line=cols[col];
+      cols[col]=cols[col]+1;
+      printf "\033[%s;%sH\033[2;32m%s", line, col, letter;
+      printf "\033[%s;%sH\033[1;37m%s\033[0;0H", cols[col], col, letter;
+      if (cols[col] >= lines) {
+        cols[col]=0;
+      }
+    }
+  }'
+  echo -e "\e[1;40m"
+  clear
+  while :; do
+    echo "${lines}" "${cols}" $(("${RANDOM}" % "${cols}")) $(("${RANDOM}" % 72))
+    sleep 0.05
+  done | awk "${awkscript}"
+}
+
+# Function: backup
+# Description: Creates a backup of each file passed as an argument.
+# Usage: backup file1 [file2 ...]
+backup() {
+  local file
+  for file in "$@"; do
+    cp "${file}" "${file}".bak
+  done
+}
+
+# Function: -echo
+# Description: Launches a program in a terminal without generating any output,
+#              detaches the process from the terminal (can then close the terminal without terminating the process).
+# Usage: -echo command [arguments ...]
+-echo() {
+  "$@" &>/dev/null &
+  disown
+}
