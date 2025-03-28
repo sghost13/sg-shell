@@ -1,28 +1,26 @@
-#!/usr/bin/env bash
-
 # Use "git help --config" to ouput all config options
+# The values in the [user] section are set in $DOTFILES/local
+# https://stackoverflow.com/questions/42553685/setting-git-username-and-email-without-using-gitconfig
 
 [user]
-	# The values in the [user] section are set in $DOTFILES/local
-	# https://stackoverflow.com/questions/42553685/setting-git-username-and-email-without-using-gitconfig
 #	email = email@email.com
 #	name = username
 #	signingkey = gpgkeyithink
-#	useConfigOnly = 
-	
+#	useConfigOnly =
+
 [include]
 #	path = ~/.config/dotfiles/local/git/config.local
 
 [core]
-#	excludesfile = ~/.config/git/gitignore
-#	editor = micro
+excludesfile = ~/.config/git/gitignore
+editor = micro
 #	pager = delta
 #	ignorecase = false
 #	untrackedCache = true
-#	askPass = 
+#	askPass =
 
 [gpg]
-	
+
 [interactive]
 #	diffFilter = delta --color-only --features=interactive
 
@@ -34,13 +32,13 @@
 #	syntax-theme = Dracula
 
 [web]
-#	browser = firefox
+browser = firefox
 
 [http]
-	sslVerify = true
-	sslVersion = tlsv1.2
-#	userAgent = 
-#	version = 
+sslVerify = true
+sslVersion = tlsv1.2
+#	userAgent =
+#	version =
 
 [https]
 
@@ -55,14 +53,13 @@
 #	helper =
 
 [color]
-#	ui = auto
+ui = auto
 
 [init]
-#	defaultBranch = main
+defaultBranch = main
 
 [commit]
 #	gpgsign = true
-#	template = ~/.gitmessage
+#	template = ~/.config/git/gitmessage
 [help]
 #	autocorrect = 1
-

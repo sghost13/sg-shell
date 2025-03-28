@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash disable=2154
+# shell-check doesn't support zsh, fake it with bash
 
 # Default programs
 export LANGUAGE="en_US"
@@ -55,31 +56,46 @@ if command -v systemctl >/dev/null; then
 fi
 
 # Kubernetes
-export KUBECONFIG="${KUBECONFIG:-${XDG_CONFIG_HOME}/kube/config}"
+if command -v kubectl >/dev/null; then
+  export KUBECONFIG="${KUBECONFIG:-${XDG_CONFIG_HOME}/kube/config}"
+fi
 
-# Disable Dotnet CLI telemetry
-export DOTNET_CLI_TELEMETRY_OPTOUT="1"
+# .NET Core
+if command -v dotnet >/dev/null; then
+  # Disable Dotnet CLI telemetry
+  export DOTNET_CLI_TELEMETRY_OPTOUT="1"
+fi
 
 # Rust
-export CARGO_HOME="${CARGO_HOME:-${XDG_DATA_HOME}/cargo}"
-export RUSTUP_HOME="${RUSTUP_HOME:-${XDG_DATA_HOME}/rustup}"
+if command -v rustc >/dev/null || command -v cargo >/dev/null; then
+  export CARGO_HOME="${CARGO_HOME:-${XDG_DATA_HOME}/cargo}"
+  export RUSTUP_HOME="${RUSTUP_HOME:-${XDG_DATA_HOME}/rustup}"
+fi
 
 # Go
-#export GOPATH=
-#export GOBIN=
-#export GOCACHE=
+#if command -v go >/dev/null; then
+#  export GOPATH=
+#  export GOBIN=
+#  export GOCACHE=
+#fi
 
 # less
-export LESSHISTFILE="${XDG_STATE_HOME}/less/history"
+if command -v less >/dev/null; then
+  export LESSHISTFILE="${XDG_STATE_HOME}/less/history"
+fi
 
 # Python
-export PYTHONPYCACHEPREFIX="${XDG_CACHE_HOME}/python"
-export PYTHONUSERBASE="${XDG_DATA_HOME}/python"
-export IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
+if command -v python3 >/dev/null || command -v python >/dev/null; then
+  export PYTHONPYCACHEPREFIX="${XDG_CACHE_HOME}/python"
+  export PYTHONUSERBASE="${XDG_DATA_HOME}/python"
+  export IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
+fi
 
 # Node.js
-export NODE_OPTIONS="--max-old-space-size=4096" # --openssl-legacy-provider"
-export NODE_REPL_HISTORY="${NODE_REPL_HISTORY:-${XDG_DATA_HOME}/nodejs/repl_history}"
+if command -v node >/dev/null; then
+  export NODE_OPTIONS="--max-old-space-size=4096" # --openssl-legacy-provider"
+  export NODE_REPL_HISTORY="${NODE_REPL_HISTORY:-${XDG_DATA_HOME}/nodejs/repl_history}"
+fi
 
 # Volta
 if command -v volta >/dev/null; then
@@ -87,31 +103,62 @@ if command -v volta >/dev/null; then
 fi
 
 # npm
-export NPM_CONFIG_USERCONFIG="${NPM_CONFIG_USERCONFIG:-${XDG_CONFIG_HOME}/npm/npmrc}"
-#export NPM_PATH="$XDG_CONFIG_HOME/node_modules"
-#export NPM_BIN="$XDG_CONFIG_HOME/node_modules/bin"
-#export NPM_CONFIG_PREFIX="$XDG_CONFIG_HOME/node_modules"
+if command -v npm >/dev/null; then
+  export NPM_CONFIG_USERCONFIG="${NPM_CONFIG_USERCONFIG:-${XDG_CONFIG_HOME}/npm/npmrc}"
+  #export NPM_PATH="$XDG_CONFIG_HOME/node_modules"
+  #export NPM_BIN="$XDG_CONFIG_HOME/node_modules/bin"
+  #export NPM_CONFIG_PREFIX="$XDG_CONFIG_HOME/node_modules"
+fi
 
 # GPG
-export GNUPGHOME="${GNUPGHOME:-${XDG_DATA_HOME}/gnupg}"
+if command -v gpg >/dev/null; then
+  export GNUPGHOME="${GNUPGHOME:-${XDG_DATA_HOME}/gnupg}"
+fi
 
 # Ccache
-export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME}/ccache.config"
-export CCACHE_DIR="${XDG_CACHE_HOME}/ccache"
+if command -v ccache >/dev/null; then
+  export CCACHE_CONFIGPATH="${XDG_CONFIG_HOME}/ccache.config"
+  export CCACHE_DIR="${XDG_CACHE_HOME}/ccache"
+fi
 
 # Android
-export ANDROID_SDK_HOME="${XDG_CONFIG_HOME}/android"
-export ANDROID_SDK_ROOT="${XDG_DATA_HOME}/android"
-export ANDROID_AVD_HOME="${XDG_DATA_HOME}/android"
-export ANDROID_EMULATOR_HOME="${XDG_DATA_HOME}/android"
-export ADB_VENDOR_KEY="${XDG_CONFIG_HOME}/android"
+if command -v adb >/dev/null || command -v android >/dev/null || command -v sdkmanager >/dev/null; then
+  export ANDROID_SDK_HOME="${XDG_CONFIG_HOME}/android"
+  export ANDROID_SDK_ROOT="${XDG_DATA_HOME}/android"
+  export ANDROID_AVD_HOME="${XDG_DATA_HOME}/android"
+  export ANDROID_EMULATOR_HOME="${XDG_DATA_HOME}/android"
+  export ADB_VENDOR_KEY="${XDG_CONFIG_HOME}/android"
+  export ANDROID_USER_HOME="${XDG_DATA_HOME}/android"
+fi
 
-# Misc
-export WGETRC="${WGETRC:-${XDG_CONFIG_HOME}/wget/wgetrc}"
-export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
-#export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME}"/java
-export JUPYTER_CONFIG_DIR="${JUPYTER_CONFIG_DIR:-${XDG_CONFIG_HOME}/jupyter}"
-export VAGRANT_HOME="${XDG_DATA_HOME}/vagrant"
-export ICEAUTHORITY="${XDG_CACHE_HOME}/ICEauthority"
+# wget
+if command -v wget >/dev/null; then
+  export WGETRC="${WGETRC:-${XDG_CONFIG_HOME}/wget/wgetrc}"
+fi
+
+# Docker
+if command -v docker >/dev/null; then
+  export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
+fi
+
+# Java
+#if command -v java >/dev/null; then
+#  export JAVAOPTIONS=-Djava.util.prefs.userRoot="${XDG_CONFIG_HOME}"/java
+#fi
+
+# Jupyter
+if command -v jupyter >/dev/null; then
+  export JUPYTER_CONFIG_DIR="${JUPYTER_CONFIG_DIR:-${XDG_CONFIG_HOME}/jupyter}"
+fi
+
+# Vagrant
+if command -v vagrant >/dev/null; then
+  export VAGRANT_HOME="${XDG_DATA_HOME}/vagrant"
+fi
+
+# ICE Authority
+if [[ -n "${DISPLAY}" ]]; then
+  export ICEAUTHORITY="${XDG_CACHE_HOME}/ICEauthority"
+fi
 
 # export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv

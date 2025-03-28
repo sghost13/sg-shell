@@ -13,7 +13,7 @@ shopt -s failglob
 
 clear
 
-DIR="$HOME/.local/share/colorscripts"
+DIR="$HOME/.local/bin/colorscripts"
 COUNT="$(find "$DIR" -maxdepth 1 -type f | wc -l)"
 ARRAY=("$DIR"/*)
 CHOICE="$(( "$RANDOM" % "$COUNT" ))"

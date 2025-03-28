@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash disable=2154
+# shell-check doesn't support zsh, fake it with bash
 
 # Function: mcd
 # Description: Creates a new directory and changes the current working directory to the newly created directory.
@@ -13,16 +14,16 @@ mcd() {
 # Function: pace
 # Description: Interactively searches for explicitly installed packages using fzf and displays package information using pacman.
 # Usage: pace
-pace() {
-  pacman -Qeq | fzf "${FZF_OPTS[@]}" --ansi --preview-window=bottom,75% --preview="pacman -Qi {}"
-}
+#pace() {
+#  pacman -Qeq | fzf "${FZF_OPTS[@]}" --ansi --preview-window=bottom,75% --preview="pacman -Qi {}"
+#}
 
 # Function: pacd
 # Description: Interactively searches for packages installed as dependencies using fzf and displays package information using pacman.
 # Usage: pacd
-pacd() {
-  pacman -Qdq | fzf "${FZF_OPTS[@]}" --ansi --preview-window=bottom,75% --preview="pacman -Qi {}"
-}
+#pacd() {
+#  pacman -Qdq | fzf "${FZF_OPTS[@]}" --ansi --preview-window=bottom,75% --preview="pacman -Qi {}"
+#}
 
 # Function: matrix
 # Description: Load the matrix

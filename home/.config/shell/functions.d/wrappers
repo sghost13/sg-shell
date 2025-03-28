@@ -36,6 +36,7 @@ testy() {
 }
 
 # TODO: Fix "cd $EMPTY_VAR" bug.
+# TODO: Fix issues with handling spaces in directories on preview.
 # Function: cd
 # Description: If no arguments are passed, use fzf to select a directory interactively with tree previews. Change working directory to selection, and list contents.
 # Usage: cd [DIRECTORY]
@@ -138,7 +139,7 @@ function sgcp() {
     if [[ "$(basename "${SHELL}")" =~ "bash" ]]; then
       read -r -e -p 'Copy full path destination directory: ' -i "${target}" target
     elif [[ "$(basename "${SHELL}")" = "zsh" ]]; then
-      read -r "target?Copy full path desitinaion directory: "
+      read -r "target?Copy full path destination directory: "
     else
       red "$(basename "${SHELL}") is not supported. Exiting.\n"
       return 1
@@ -193,7 +194,7 @@ function sgmv() {
     if [[ "$(basename "${SHELL}")" =~ "bash" ]]; then
       read -r -e -p 'Move full path destination directory : ' -i "${target}" target
     elif [[ "$(basename "${SHELL}")" = "zsh" ]]; then
-      read -r "target?Move full path desitinaion directory : "
+      read -r "target?Move full path destination directory : "
     else
       red "$(basename "${SHELL}") is not supported. Exiting.\n"
       return 1
@@ -241,6 +242,7 @@ function sgmv() {
   return $?
 }
 
+#TODO:  consider deleting this fix. not using fast-highlight anymore, it looks abandoned and causes errors
 # This function only exists to fix the lag for whatis command due to zsh-fast-syntax-highlighting on mac.
 # https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/27
 function whatis() { if [[ -v THEFD ]]; then :; else command whatis "$@"; fi; }

@@ -1,8 +1,10 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash disable=2154
+# shell-check doesn't support zsh, fake it with bash
 
 # Global alias. Catches help flags and colors output with bat
-alias -g -- -h='-h 2>&1 | bat --paging=never --language=help --style=plain'
-alias -g -- --help='--help 2>&1 | bat --paging=never --language=help --style=plain'
+# bat started throwing weird error with this, while still working. temporary lazy fix redirect errors to null
+alias -g -- -h='-h 2>&1 | bat --paging=never --language=help --style=plain 2>/dev/null'
+alias -g -- --help='--help 2>&1 | bat --paging=never --language=help --style=plain 2>/dev/null'
 
 alias term='open -n -a iTerm'
 
@@ -26,6 +28,10 @@ alias lt='eza "${EZA_OPTS[@]}" --tree'
 # cd
 alias cl='command clear && eza "${EZA_OPTS[@]}" --grid'
 alias ..='builtin cd .. && clear && eza "${EZA_OPTS[@]}" --grid'
+
+# git
+alias gs='git status'
+alias ga='git add'
 
 #gpg
 #verify signature for isos
@@ -53,7 +59,7 @@ alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp;'
 alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
 
 # shellcheck disable=SC2139
-alias wget="wget --hsts-file=$XDG_DATA_HOME/wget-hsts"
+alias wget="wget --hsts-file=${XDG_DATA_HOME}/wget-hsts"
 
 alias fonts='fc-cache -f -v'
 
@@ -137,53 +143,53 @@ alias reflector='sudo reflector --save /etc/pacman.d/mirrorlist --protocol https
 
 # compression ----------------------------------------------------------------------
 
-# Bzip2
-alias bzip='bzip2 --best --verbose -9' #decomp
-alias bunzip2='bunzip2 --verbose -9'   #decomp
-alias bzcat='bzcat --verbose -9'       #decomp to stdout
+# # Bzip2
+# alias bzip='bzip2 --best --verbose -9' #decomp
+# alias bunzip2='bunzip2 --verbose -9'   #decomp
+# alias bzcat='bzcat --verbose -9'       #decomp to stdout
 
-# lrzip
-alias lrzip='lrzip --hash --bzip2 --threads=6 --maxram=10000 -vv'
-alias lrzipcomp='lrzip --hash --bzip2 --threads=6 --maxram=10000 -vv'
-alias lrzipdecomp='lrzip --hash --threads=6 --maxram=10000 --decompress --check -vv'
+# # lrzip
+# alias lrzip='lrzip --hash --bzip2 --threads=6 --maxram=10000 -vv'
+# alias lrzipcomp='lrzip --hash --bzip2 --threads=6 --maxram=10000 -vv'
+# alias lrzipdecomp='lrzip --hash --threads=6 --maxram=10000 --decompress --check -vv'
 
-#alias lrzipencrypt=""
-#alias lrzipdecrypt=""
+# #alias lrzipencrypt=""
+# #alias lrzipdecrypt=""
 
-#alias lrzipencryptcomp=""
-#alias lrzipdecryptcomp=""
+# #alias lrzipencryptcomp=""
+# #alias lrzipdecryptcomp=""
 
-# lzop
-alias lzop='lzop -8 --color --verbose'
-alias lzopcomp='lzop -8 --color --verbose'
-alias lzopdecomp='lzop -8 --color --verbose --decompress'
+# # lzop
+# alias lzop='lzop -8 --color --verbose'
+# alias lzopcomp='lzop -8 --color --verbose'
+# alias lzopdecomp='lzop -8 --color --verbose --decompress'
 
-# lz4
-alias lz4='lz4 -7 --favor-decSpeed --verbose'
-alias lz4comp='lz4 --compress -7 --favor-devSpeed --verbose --rm'
-alias lz4decomp='lz4 --decompress --verbose --rm'
+# # lz4
+# alias lz4='lz4 -7 --favor-decSpeed --verbose'
+# alias lz4comp='lz4 --compress -7 --favor-devSpeed --verbose --rm'
+# alias lz4decomp='lz4 --decompress --verbose --rm'
 
-# lzip
-alias lzip='lzip -9 --verbose'
-alias lz4comp='lzip -9 --verbose'
-alias lz4decomp='lzip -9 --decompress --verbose'
+# # lzip
+# alias lzip='lzip -9 --verbose'
+# alias lz4comp='lzip -9 --verbose'
+# alias lz4decomp='lzip -9 --decompress --verbose'
 
-# Zstd
-alias zstd='zstd --threads=8 --content-size -M10240 --verbose -9 --exclude-compressed'
-alias zstdcomp='zstd --compress --rsyncable --content-size -M10240 --verbose -9 --rm --exclude-compressed'
-alias zstddecomp='zstd --decompress -M10240 --verbose -9 --rm'
+# # Zstd
+# alias zstd='zstd --threads=8 --content-size -M10240 --verbose -9 --exclude-compressed'
+# alias zstdcomp='zstd --compress --rsyncable --content-size -M10240 --verbose -9 --rm --exclude-compressed'
+# alias zstddecomp='zstd --decompress -M10240 --verbose -9 --rm'
 
-# PIXZ (parallel indexed xz)
-alias pixz='pixz'
+# # PIXZ (parallel indexed xz)
+# alias pixz='pixz'
 
-# XZ
-alias xz='xz -9 --threads=0 --verbose --verbose'
-alias xzcomp='xz --compress --threads=0 --memlimit-compress=75% --verbose --verbose'
-alias xzdecomp='xz --decompress --threads=0 --memlimit-decompress=75% --verbose --verbose'
+# # XZ
+# alias xz='xz -9 --threads=0 --verbose --verbose'
+# alias xzcomp='xz --compress --threads=0 --memlimit-compress=75% --verbose --verbose'
+# alias xzdecomp='xz --decompress --threads=0 --memlimit-decompress=75% --verbose --verbose'
 
-# pigz
-alias gzip='pigz -9 --verbose --verbose'
-alias pigcomp='pigz --best --independent --processes 8 --list --oneblock --test --verbose --verbose'
-alias pigdecomp='pigz --decompress --processes 8 --verbose --verbose'
+# # pigz
+# alias gzip='pigz -9 --verbose --verbose'
+# alias pigcomp='pigz --best --independent --processes 8 --list --oneblock --test --verbose --verbose'
+# alias pigdecomp='pigz --decompress --processes 8 --verbose --verbose'
 
 #  ----------------------------------------------------------------------

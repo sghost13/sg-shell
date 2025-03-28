@@ -1,46 +1,57 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash disable=2154
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# functions
-# Either dir exhists, or create that directory.
-makedir() { [[ -d "${1}" ]] || mkdir "${1}"; }
+# Either dir exists, or create that directory.
+# Usage: makedir dirname
+function makedir() {
+	[[ -d "${1}" ]] || mkdir -p "${1}"
+}
 
-# Either file exhists, or create that file.
-makefile() { [[ -f "${1}" ]] || touch "${1}"; }
+# Either file exists, or create that file (and parent directories).
+# Usage: makefile filename
+function makefile() {
+	if [[ ! -f "${1}" ]]; then
+		# Create parent directory if it doesn't exist
+		dirname=$(dirname "${1}")
+		[[ -d "${dirname}" ]] || mkdir -p "${dirname}"
+		touch "${1}"
+	fi
+}
 
-# Test file exhists and can be read, then source it. Else echo where it fails.
-sauce() {
+# Test file exists and can be read, then source it. Else echo where it fails.
+# Usage: sauce filename
+function sauce() {
 	if [[ -f "${1}" && -r "${1}" ]]; then
 		# shellcheck disable=SC1090
 		source "${1}"
-	elif [[ ! -f "${1}" ]]; then
-		echo "File doesn't exist: ${1}"
 	else
-		echo "Couldn't read file: ${1}"
+		echo "File doesn't exist, or cannot be read: ${1}" >&2
 	fi
 }
 
-# Test dir exhists, then run sauce on each file within.
-sauced() {
-	local file
+# Source all files in a directory if it exists. Else echo where it fails.
+# Usage: sauced dirname
+function sauced() {
 	if [[ -d "${1}" ]]; then
+		local file
 		for file in "${1}"/*; do
-			sauce "${file}"
+			# Skip if not a regular file
+			[[ -f "${file}" ]] && sauce "${file}"
 		done
 	else
-		echo "Directory doesn't exhist: ${1}"
+		echo "Directory doesn't exist: ${1}" >&2
 	fi
 }
 
-sauce "$XDG_CONFIG_HOME/shell/env.sh"
-sauced "$XDG_CONFIG_HOME/shell/functions.d"
-sauce "$XDG_CONFIG_HOME/shell/path.sh"
-sauce "$XDG_CONFIG_HOME/shell/alias.sh"
+sauce "${XDG_CONFIG_HOME}/shell/env.sh"
+sauced "${XDG_CONFIG_HOME}/shell/functions.d"
+sauce "${XDG_CONFIG_HOME}/shell/path.sh"
+sauce "${XDG_CONFIG_HOME}/shell/alias.sh"
 
 export HISTTIMEFORMAT='%F %T '
-export HISTFILE=${XDG_DATA_HOME:-$HOME/.local/state}/bash/history
+export HISTFILE=${XDG_DATA_HOME:-${HOME}/.local/state}/bash/history
 export HISTSIZE=20000
 export HISTFILESIZE=${HISTSIZE}
 export HISTCONTROL=ignoreboth:erasedups
@@ -53,6 +64,9 @@ xterm* | rxvt* | Eterm* | aterm | kterm | gnome* | alacritty | st | konsole*)
 	;;
 screen*)
 	PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+	;;
+*)
+	echo "ERROR"
 	;;
 esac
 
@@ -75,11 +89,11 @@ if [[ "$(expr index "$-" i)" -gt 0 ]]; then bind "set completion-ignore-case on"
 if [[ "$(expr index "$-" i)" -gt 0 ]]; then bind "set show-all-if-ambiguous on"; fi
 
 # dirs and files that need to be manually made
-makedir "$XDG_STATE_HOME/bash"
-makefile "$XDG_STATE_HOME/bash/history"
+makedir "${XDG_STATE_HOME}/bash"
+makefile "${XDG_STATE_HOME}/bash/history"
 
-makedir "$XDG_DATA_HOME/nodejs"
-makefile "$NODE_REPL_HISTORY"
+makedir "${XDG_DATA_HOME}/nodejs"
+makefile "${NODE_REPL_HISTORY}"
 
 # eval stuff
 builtin eval "$(starship init bash)"

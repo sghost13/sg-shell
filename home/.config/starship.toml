@@ -1,7 +1,7 @@
 ## FIRST LINE/ROW: Info & Status
 # First param ─┌
 [username]
-format = " [╭─$user]($style)@"
+format = " [╭─$user]($style)"
 show_always = true
 style_root = "bold red"
 style_user = "bold red"
@@ -9,18 +9,18 @@ style_user = "bold red"
 # Second param
 [hostname]
 disabled = false
-format = "[$hostname]($style) in "
+format = "@[$hostname]($style) in "
 ssh_only = false
 style = "bold dimmed red"
 trim_at = "-"
-ssh_symbol = " "
+ssh_symbol = "󰣀 "
 
 # Third param
 [directory]
 style = "purple"
 truncate_to_repo = true
 truncation_length = 0
-truncation_symbol = "repo: "
+truncation_symbol = "repo:"
 read_only = " 󰌾"
 
 # Fourth param
@@ -33,60 +33,37 @@ ahead = "⇡${count}"
 behind = "⇣${count}"
 deleted = "x"
 diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-style = "white"
+style = "bold red"
 
 # Last param in the first line/row
 [cmd_duration]
 disabled = false
 format = "took [$duration]($style)"
-min_time = 1
+min_time = 60000  # Show time only if command takes more than 60000 milliseconds (1 minute)
 
 
 ## SECOND LINE/ROW: Prompt
 # Somethere at the beginning
-[battery]
-charging_symbol = ""
-disabled = true
-discharging_symbol = ""
-full_symbol = ""
-
-[[battery.display]] # "bold red" style when capacity is between 0% and 10%
-disabled = true
-style = "bold red"
-threshold = 15
-
-[[battery.display]] # "bold yellow" style when capacity is between 10% and 30%
-disabled = true
-style = "bold yellow"
-threshold = 50
-
-[[battery.display]] # "bold green" style when capacity is between 10% and 30%
-disabled = true
-style = "bold green"
-threshold = 80
-
-# Prompt: optional param 1
-[time]
-disabled = true
-format = " 🕙 $time($style)\n"
-style = "bright-white"
-time_format = "%T"
 
 # Prompt: param 2
 [character]
-error_symbol = " [ ](bold red)"
-success_symbol = " [╰─λ](bold red)"
+error_symbol = "[ ](bold red)"
+success_symbol = " [╰─ λ](bold red)"
 
-# SYMBOLS
 [status]
 disabled = false
-format = '[\[$symbol$status_common_meaning$status_signal_name$status_maybe_int\]]($style)'
-map_symbol = true
-pipestatus = true
-symbol = "🔴"
+format = '[$symbol Exit Code:$status]($style)'
+#format = '[$symbol]($style)'
+style = "bold red"
+#map_symbol = true
+#pipestatus = true
+symbol = " ╰─"
 
+# SYMBOLS
 [aws]
-symbol = "  "
+symbol = "󰸏 "
+format = "on [$symbol$profile]($style)[$account]($style) "
+style = "bold yellow"
 
 [buf]
 symbol = " "

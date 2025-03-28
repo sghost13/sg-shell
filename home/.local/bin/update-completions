@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+COMPLETIONS_DIR="${XDG_CONFIG_HOME}/shell/completions"
+
+poetry completions zsh > "${COMPLETIONS_DIR}/_poetry"

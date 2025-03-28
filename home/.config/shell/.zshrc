@@ -1,30 +1,45 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash disable=2154
+# shell-check doesn't support zsh, fake it with bash
 
-# Either dir exhists, or create that directory.
-makedir() { [[ -d "${1}" ]] || mkdir "${1}"; }
+# Either dir exists, or create that directory.
+# Usage: makedir dirname
+function makedir() {
+    [[ -d "${1}" ]] || mkdir -p "${1}"
+}
 
-# Either file exhists, or create that file.
-makefile() { [[ -f "${1}" ]] || touch "${1}"; }
+# Either file exists, or create that file (and parent directories).
+# Usage: makefile filename
+function makefile() {
+    if [[ ! -f "${1}" ]]; then
+        # Create parent directory if it doesn't exist
+        dirname=$(dirname "${1}")
+        [[ -d "${dirname}" ]] || mkdir -p "${dirname}"
+        touch "${1}"
+    fi
+}
 
-# Test file exhists and can be read, then source it. Else echo where it fails.
-sauce() {
+# Test file exists and can be read, then source it. Else echo where it fails.
+# Usage: sauce filename
+function sauce() {
     if [[ -f "${1}" && -r "${1}" ]]; then
         # shellcheck disable=SC1090
         source "${1}"
     else
-        echo "File doesn't exist, or cannot be read: ${1}"
+        echo "File doesn't exist, or cannot be read: ${1}" >&2
     fi
 }
 
 # Source all files in a directory if it exists. Else echo where it fails.
-sauced() {
+# Usage: sauced dirname
+function sauced() {
     if [[ -d "${1}" ]]; then
         local file
         for file in "${1}"/*; do
-            sauce "${file}"
+            # Skip if not a regular file
+            [[ -f "${file}" ]] && sauce "${file}"
         done
     else
-        echo "Directory doesn't exhist: ${1}"
+        echo "Directory doesn't exist: ${1}" >&2
     fi
 }
 
@@ -33,6 +48,9 @@ sauce "${HOME}/.config/shell/env.sh"
 sauce "${XDG_CONFIG_HOME}/shell/path.sh"
 sauce "${XDG_CONFIG_HOME}/shell/alias.sh"
 sauced "${XDG_CONFIG_HOME}/shell/functions.d"
+
+# Source extra completions
+fpath+=("${XDG_CONFIG_HOME}/shell/completions")
 
 # Zsh Variables
 export HISTSIZE=10000
@@ -48,14 +66,16 @@ makedir "${XDG_STATE_HOME}/zsh/zsh_sessions"
 makedir "${XDG_DATA_HOME}/nodejs"
 makefile "${NODE_REPL_HISTORY}"
 
-# Start ssh-agent if not already running
-eval "$(ssh-agent -s >/dev/null)"
+# Check if SSH agent is already running
+if [[ -z "${SSH_AGENT_PID}" ]] || ! kill -0 "${SSH_AGENT_PID}" 2>/dev/null; then
+    eval "$(ssh-agent -s >/dev/null)"
+fi
 
 # Initialize brew, starship, direnv, and zoxide if they are installed
 [[ -x "$(command -v brew)" ]] && builtin eval "$(brew shellenv)"
 [[ -x "$(command -v starship)" ]] && builtin eval "$(starship init zsh)"
 [[ -x "$(command -v direnv)" ]] && builtin eval "$(direnv hook zsh)"
-[[ -x "$(command -v zoxide)" ]] && builtin eval "$(zoxide init zsh)"
+# [[ -x "$(command -v zoxide)" ]] && builtin eval "$(zoxide init zsh)"
 
 # Set the window title
 function set_win_title() {
@@ -63,23 +83,21 @@ function set_win_title() {
 }
 precmd_functions+=(set_win_title)
 
-# Source zsh plugins
-sauce "/usr/local/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
-sauce "/usr/local/share/zsh-autopair/autopair.zsh"
-sauce "/usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-sauce "/usr/local/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-sauce "/usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
-
-# Speed up completions
-zstyle ':completion:*' accept-exact '*(N)'
-zstyle ':completion:*' use-cache on
-
 # Optimize history search and autosuggestions
 export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
 export ZSH_AUTOSUGGEST_USE_ASYNC="1"
 
-# Enable asynchronous highlighting
-export FAST_HIGHLIGHTING_ASYNC="1"
+# Source zsh plugins
+sauce "/usr/local/share/zsh-autopair/autopair.zsh"
+sauce "/usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+sauce "/usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh"
+sauce "/usr/local/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
+# Always load syntax highlighting last
+sauce "/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+# Speed up completions
+zstyle ':completion:*' accept-exact '*(N)'
+zstyle ':completion:*' use-cache on
 
 ## ----------------- shell-options
 
@@ -108,7 +126,7 @@ setopt AUTO_PUSHD # Make cd push the old directory onto the directory stack
 
 # Disable beeps
 setopt NO_BEEP NO_HIST_BEEP       # No beeps here
-unsetopt BEEP LIST_BEEP HIST_BEEP # Get outta here, ya stinkin' beeps
+unsetopt BEEP LIST_BEEP HIST_BEEP # Get outta here, ya stinking beeps
 
 # Aliases and corrections
 setopt ALIASES          # Expand aliases

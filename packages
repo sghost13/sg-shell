@@ -2,7 +2,6 @@
 
 zsh
 zsh-syntax-highlighting
-zsh-fast-syntax-highlighting
 zsh-history-substring-search
 zsh-autosuggestions
 zsh-autocomplete
