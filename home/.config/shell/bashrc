@@ -84,10 +84,19 @@ esac
 #[[ -x "$(command -v starship)" ]] && eval "$(starship init bash)"
 [[ -x "$(command -v direnv)" ]] && eval "$(direnv hook bash)"
 
-if command -v starship >/dev/null 2>&1; then
-	eval "$(starship init bash)"
+# Check if the current user is root
+if [[ "${EUID}" -eq 0 ]]; then
+	# Root user: set a red prompt
+	PS1='\[\033[01;31m\]\u@\h \[\033[01;34m\]\w \$\[\033[00m\] '
 else
-	PS1='\[\033[01;32m\]\u@\h \[\033[01;34m\]\w \$\[\033[00m\] '
+	# Non-root user
+	# Check if Starship prompt is installed
+	if command -v starship >/dev/null 2>&1; then
+		eval "$(starship init bash)"
+	else
+		# Starship not installed: set a green prompt
+		PS1='\[\033[01;32m\]\u@\h \[\033[01;34m\]\w \$\[\033[00m\] '
+	fi
 fi
 
 # Bash shopt options
