@@ -5,8 +5,8 @@ ZDOTDIR is set to `$HOME/.config/shell` in `etc/zshenv`.
 For BASH, a single file `.bashrc` is maintained for use on servers.  
 You can find it at [home/.config/shell/.bashrc](https://github.com/sghost13/sg-shell/blob/main/home/.config/shell/bashrc).
 
+Download and replace $HOME/.bashrc
 ```bash
-# Download and replace $HOME/.bashrc
 curl -sSL -o "$HOME/.bashrc" "https://raw.githubusercontent.com/sghost13/sg-shell/main/home/.config/shell/bashrc"
 ```
 
