@@ -10,5 +10,5 @@ Download and replace $HOME/.bashrc
 curl -sSL -o "$HOME/.bashrc" "https://raw.githubusercontent.com/sghost13/sg-shell/main/home/.config/shell/bashrc"
 ```
 
-Shellcheck is set up for bash scripting, and I follow Google’s style guides here:  
+[Shellcheck](https://github.com/sghost13/sg-shell/blob/main/home/.config/shellcheckrc) is set up for bash scripting, and I follow Google’s style guides here:  
 [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html).
