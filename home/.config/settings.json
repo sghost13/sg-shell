@@ -1,0 +1,322 @@
+{
+  // hack txt files to get shellcheck highlights
+  "files.associations": {
+    "*.txt": "shellscript",
+    "*.nginx.conf": "nginx",
+    "*-nginx.conf": "nginx"
+  },
+
+  "material-icon-theme.files.associations": {
+    "*.nginx.conf": "nginx",
+    "*-nginx.conf": "nginx"
+  },
+
+  "yaml.schemas": {
+    "https://json.schemastore.org/traefik-v3.json": [
+      "traefik.yaml",
+      "traefik.yml",
+      "traefik/rules/*.yaml",
+      "traefik/rules/*.yml"
+    ]
+  },
+
+  // ===== Telemetry Settings =====
+  "telemetry.telemetryLevel": "off",
+  "aws.telemetry": false,
+  "sonarlint.disableTelemetry": true,
+  "redhat.telemetry.enabled": false,
+  "typescript.surveys.enabled": false,
+  "python.telemetry.enabled": false,
+  "go.survey.prompt": false,
+  "cmake.telemetryEnabled": false,
+  "gitlens.telemetry.enabled": false,
+
+  // ===== Editor Settings =====
+  "editor.fontFamily": "JetBrainsMono Nerd Font",
+  "editor.tabSize": 2,
+  "editor.tabCompletion": "on",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.linkedEditing": true,
+  "files.autoSave": "onFocusChange",
+
+  // ===== Terminal Settings =====
+  "terminal.integrated.defaultProfile.osx": "zsh",
+
+  // ===== Workbench & UI Settings =====
+  "workbench.settings.applyToAllProfiles": ["editor.fontFamily"],
+  "workbench.colorTheme": "One Dark Pro Darker",
+  "workbench.iconTheme": "material-icon-theme",
+  "oneDarkPro.bold": true,
+  "bracketLens.mode": "auto",
+  "bracketLens.line": "start-line-number",
+
+  // ===== Git Settings =====
+  "git.openRepositoryInParentFolders": "never",
+
+  // ===== Search Settings =====
+  "path-intellisense.showHiddenFiles": true,
+  "search.useParentIgnoreFiles": true,
+  "search.useGlobalIgnoreFiles": true,
+
+  // ===== Prettier Settings =====
+  "prettier.singleQuote": true,
+  "prettier.tabWidth": 2,
+
+  // ===== Language-specific Formatter Settings =====
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.autoIndent": "keep"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[less]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[graphql]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[kotlin]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[csharp]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // ===== Miscellaneous Extension Settings =====
+  "supermaven.allowGitignore": true,
+
+  // ===== SonarLint Rules =====
+  "sonarlint.rules": {
+    "typescript:S125": {
+      "level": "off"
+    },
+    "cloudformation:S6294": {
+      "level": "off"
+    }
+  },
+
+  // ===== Spell Checker Settings =====
+  "cSpell.userWords": [
+    "AAAAC",
+    "AAAAI",
+    "addpath",
+    "agetty",
+    "alacritty",
+    "apigatewayv",
+    "armhf",
+    "aterm",
+    "AUTOCD",
+    "autodrain",
+    "autoinstall",
+    "autologin",
+    "autopair",
+    "awkscript",
+    "awscli",
+    "batcat",
+    "boto",
+    "Bruschetta",
+    "bunzip",
+    "CCACHE",
+    "cdrom",
+    "Classico",
+    "cmdline",
+    "colorscript",
+    "CONFIGPATH",
+    "cooldown",
+    "cpus",
+    "CUDA",
+    "customresources",
+    "dbhost",
+    "dbname",
+    "dbpass",
+    "dbuser",
+    "debconf",
+    "Descryption",
+    "direnv",
+    "dispmanx",
+    "Djava",
+    "dtoverlay",
+    "dtparam",
+    "Dualstack",
+    "DUPS",
+    "edid",
+    "elasticloadbalancingv",
+    "erasedups",
+    "esbuild",
+    "Eterm",
+    "ethernets",
+    "Fargate",
+    "fkms",
+    "Fmuxgp",
+    "fpath",
+    "fpreview",
+    "framebuffer",
+    "framebuffers",
+    "geoip",
+    "ghostadmin",
+    "ghostcms",
+    "GNUPGHOME",
+    "GOBIN",
+    "GOCACHE",
+    "GOPATH",
+    "gpio",
+    "Haha",
+    "HARDDISK",
+    "highscore",
+    "hotplug",
+    "HTTPIP",
+    "ICEAUTHORITY",
+    "ignoreboth",
+    "Imds",
+    "Imdsv",
+    "ipify",
+    "ipython",
+    "IPYTHONDIR",
+    "Italiano",
+    "JAVAOPTIONS",
+    "keyserver",
+    "konsole",
+    "kterm",
+    "KUBECONFIG",
+    "Lambdaexecutionrole",
+    "LESSCHARSET",
+    "LESSHISTFILE",
+    "LUKS",
+    "makedir",
+    "mdbook",
+    "netdev",
+    "netplan",
+    "noclear",
+    "nocloud",
+    "nodegroup",
+    "NOGLOBAL",
+    "NOSYSTEM",
+    "nullglob",
+    "OIDC",
+    "Opensearch",
+    "opensearchservice",
+    "OPTOUT",
+    "outdir",
+    "overscan",
+    "ovftool",
+    "pacd",
+    "pacman",
+    "PAGERSECURE",
+    "Parens",
+    "poweroff",
+    "prefs",
+    "proto",
+    "ptable",
+    "PYTHONPYCACHEPREFIX",
+    "PYTHONUSERBASE",
+    "qcow",
+    "qemuargs",
+    "QLAPI",
+    "redirector",
+    "riscv",
+    "rsyslog",
+    "runcmd",
+    "rustc",
+    "rustup",
+    "rxvt",
+    "SAVEHIST",
+    "Scap",
+    "sdkmanager",
+    "sdtv",
+    "setaf",
+    "sghost",
+    "shellenv",
+    "sigv",
+    "stepfunctions",
+    "tailwindcss",
+    "Tavanti",
+    "tlsv",
+    "tolower",
+    "toupper",
+    "TRUECOLOR",
+    "unrar",
+    "unzipper",
+    "urandom",
+    "URLIFY",
+    "USERCONFIG",
+    "userdata",
+    "vfat",
+    "Virt",
+    "virtio",
+    "volgroup",
+    "WGETRC",
+    "XLARGE",
+    "xorriso",
+    "YEET",
+    "Yulig",
+    "zoxide"
+  ],
+
+  // ===== ShellCheck Settings =====
+  "shellcheck.ignorePatterns": {
+    // Configure ShellCheck to analyze Zsh files
+    // Setting values to 'false' enables checking rather than ignoring
+    // This lets you lint Zsh config files with bash-focused ShellCheck
+    "**/*.zsh": false,
+    "**/*.zshrc": false,
+    "**/zshrc": false,
+    "**/*.zprofile": false,
+    "**/zprofile": false,
+    "**/*.zlogin": false,
+    "**/zlogin": false,
+    "**/*.zlogout": false,
+    "**/zlogout": false,
+    "**/*.zshenv": false,
+    "**/zshenv": false,
+    "**/*.zsh-theme": false
+  },
+  "liveServer.settings.CustomBrowser": "firefox",
+  "liveServer.settings.donotShowInfoMsg": true,
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
+}
