@@ -270,6 +270,34 @@ function man() {
   return $?
 }
 
+# Function: n
+# Description: Opens nvim with the specified file. If used without arguments, interactively selects files to open using fzf with file previews.
+# Usage: m [options] [files]
+function n() {
+  local files
+  if [[ "$#" -eq 0 ]]; then
+    #shellcheck disable=SC2140
+    files=$(
+      fd \
+        --hidden \
+        --color=always \
+        --type=f \
+        --no-ignore-vcs \
+        --maxdepth=1 |
+        command fzf "${FZF_OPTS[@]}" \
+          --ansi \
+          --preview-window='bottom,75%' \
+          --preview="fpreview '{}'"
+    )
+    # We use xargs to capture filenames with spaces in them properly
+    echo "${files}" | xargs -I '{}' fopen '{}'
+  else
+    command nvim "$@"
+  fi
+  # Explicitly return the exit status of the last command executed. Seems to fix an issue with micro.
+  return $?
+}
+
 # Function: m
 # Description: Opens the micro editor with the specified files. If used without arguments, interactively selects files to open using fzf with file previews.
 # Usage: m [options] [files]
@@ -374,3 +402,39 @@ function mkdir() {
     command mkdir "$@"
   fi
 }
+
+# Function: ssh
+# Description: SSH wrapper that uses fzf to select a host from ~/.ssh/config if no host or options are provided. Otherwise, forwards all arguments to the real ssh.
+# Usage: ssh [host | options]
+function ssh() {
+  local ssh_config="${HOME}/.ssh/config"
+  local hosts selected
+
+  if [[ $# -eq 0 ]]; then
+    # No arguments, prompt with fzf
+    hosts=$(grep -E '^\s*Host\s+' "${ssh_config}" |
+      grep -vE '^\s*Host\s+\*' |
+      grep -vE '^\s*#' |
+      awk '{for (i=2; i<=NF; i++) print $i}' |
+      sort -u)
+
+    if [[ -z "${hosts}" ]]; then
+      echo "No hosts found in ${ssh_config}."
+      return 1
+    fi
+
+    selected=$(echo "${hosts}" | fzf "${FZF_OPTS[@]}" --prompt="SSH Host > ")
+
+    if [[ -n "${selected}" ]]; then
+      command ssh "${selected}"
+    else
+      echo "No host selected."
+      return 1
+    fi
+
+  else
+    # Arguments provided, forward to ssh
+    command ssh "$@"
+  fi
+}
+
